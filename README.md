@@ -1,5 +1,5 @@
 
-<h1 align="center">Приве, Я <a href="https://daniilshat.ru/" target="_blank">Соня</a> 
+<h1 align="center">Привет, Я <a href="https://daniilshat.ru/" target="_blank">Соня</a> 
 <img src="https://github.com/blackcater/blackcater/raw/main/images/Hi.gif" height="32"/></h1>
 <h3 align="center">И это игра CosmoWar, в которой каждый пользователь сможет побывать защитником города</h3>
 

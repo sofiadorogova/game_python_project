@@ -3,9 +3,12 @@ import random
 import os
 import time
 
-"""Основные неизменяемые костанты"""
+"""
+Основные неизменяемые костанты
+"""
+
 BASE_PATH = os.path.dirname(os.path.dirname('main.py'))
-ENEMY_COUNT = 5
+ENEMY_COUNT = {'1': 2, '2': 3, '3': 5}
 BASE_X, BASE_Y = 0, -300
 BUILDING_INFOS = {
     'house': [BASE_X - 400, BASE_Y],
@@ -212,11 +215,11 @@ def move_missiles(missiles):
         missiles.remove(dead)
 
 
-def check_enemy_count():
+def check_enemy_count(level):
     """Проверка количества выпущенных вражестких ракет.
     Их количество не должно превышать ENEMY_COUNT,
     для котроля уровня сложности."""
-    if len(enemy_missiles) < ENEMY_COUNT:
+    if len(enemy_missiles) < ENEMY_COUNT[level]:
         fire_enemy_missile()
 
 
@@ -257,12 +260,7 @@ def draw_buildings():
         building.draw()
 
 
-window = turtle.Screen()
-window.setup(1200 + 3, 800 + 3)
-window.screensize(1200, 800)
-
-
-def game():
+def game(level):
     """
     Запуск игры, объявление и определение списков зданий, наших ракет,
     вражеских ракет.
@@ -293,7 +291,7 @@ def game():
             break
         draw_buildings()
         check_impact()
-        check_enemy_count()
+        check_enemy_count(level)
         check_interceptions()
         move_missiles(missiles=our_missiles)
         move_missiles(missiles=enemy_missiles)
@@ -306,8 +304,26 @@ def game():
     pen.write('Game over', align="center", font=["Arial", 80, "bold"])
 
 
+def hello_board():
+    window.clear()
+    window.bgpic(os.path.join(BASE_PATH, "images", "background.png"))
+    pen = turtle.Turtle(visible=False)
+    pen.speed(0)
+    pen.penup()
+    pen.color('white')
+    pen.write('CosmoWar', align="center", font=["Arial", 80, "bold"])
+    display_window = window.textinput(title='Привет!', prompt='Какой уровень игры вы хотите выбрать? (1, 2, 3)')
+    user_ans = display_window.lower()
+    if user_ans in ('1', '2', '3'):
+        game(user_ans)
+
+
+window = turtle.Screen()
+window.setup(1200 + 3, 800 + 3)
+window.screensize(1200, 800)
+
 while True:
-    game()
+    hello_board()
     answer = window.textinput(title='Привет!', prompt='Хотите сыграть еще? д/н')
     if answer.lower() not in ('д', 'да', 'y', 'yes'):
         break

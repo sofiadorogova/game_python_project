@@ -230,12 +230,14 @@ def check_interceptions():
     состояние вражеской ракеты на dead.
     Функция отслеживает состояние каждой вражеской ракеты.
     """
+    global scores
     for our_missile in our_missiles:
         if our_missile.state != 'explode':
             continue
         for enemy_missile in enemy_missiles:
             if enemy_missile.distance(our_missile.x, our_missile.y) < our_missile.radius * 10:
                 enemy_missile.state = 'dead'
+                scores += 1
 
 
 def check_impact():
@@ -267,7 +269,7 @@ def game(level):
     Запуск игрового цикла.
     Объявление об окончании игры.
     """
-    global our_missiles, enemy_missiles, buildings, base
+    global our_missiles, enemy_missiles, buildings, base, scores, record
 
     window.clear()
     window.bgpic(os.path.join(BASE_PATH, "images", "background.png"))
@@ -297,11 +299,19 @@ def game(level):
         move_missiles(missiles=enemy_missiles)
         time.sleep(.01)
 
+    if record != None:
+        if scores > record:
+            record = scores
+    else:
+        record = scores
     pen = turtle.Turtle(visible=False)
     pen.speed(0)
     pen.penup()
     pen.color('red')
     pen.write('Game over', align="center", font=["Arial", 80, "bold"])
+    time.sleep(1)
+    pen.clear()
+    pen.write(f'Your result {scores}, record = {record}', align="center", font=["Verdana", 60, "normal"])
 
 
 def hello_board():
@@ -321,7 +331,8 @@ def hello_board():
 window = turtle.Screen()
 window.setup(1200 + 3, 800 + 3)
 window.screensize(1200, 800)
-
+scores = 0
+record = None
 while True:
     hello_board()
     answer = window.textinput(title='Привет!', prompt='Хотите сыграть еще? д/н')
